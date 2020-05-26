@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Main {
+public class Main1 {
 
 	public static void main(String[] args) throws IOException, JSONException 
 	{

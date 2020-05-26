@@ -6,7 +6,7 @@ import java.math.RoundingMode;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Adchu {
+public class Main {
 
 	public static void main(String[] args) throws IOException, JSONException 
 	{

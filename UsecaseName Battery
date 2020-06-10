@@ -1,0 +1,51 @@
+import java.util.*;
+import java.io.*;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+public class Battery {
+
+	public static void main(String[] args) throws IOException {
+		JSONObject object = new JSONObject();
+		File file = new File("E:\\Battery.txt");
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			String readLine;
+			String string, value = "";
+			String battery = "";
+			int line = 0;
+			int i = 0, j, val = 0,count = 0, flag = 0;
+			double temp, max = 0.0, sum = 0.0;
+			while ((readLine = br.readLine()) != null) {
+				count += 1;
+				StringTokenizer stringtokenizer = new StringTokenizer(readLine);
+				while (stringtokenizer.hasMoreTokens()) {
+					string = stringtokenizer.nextToken();
+					if (flag == 0) {
+						if (string.equals("Uid")) {
+							battery = readLine.substring(16, 21);
+							flag = 1;
+						}
+					}
+					if (string.equals("Foreground")) {
+						value = readLine.substring(27, 60);
+						value = value.trim();
+						break;
+					}
+				}
+			}
+			double drain = Double.parseDouble(battery);
+			double percentage = drain/(double)1000;
+			object.put("Foreground_time", value);
+			object.put("Battery_percentage", percentage);
+			object.put("Battery_drain", drain);
+			JSONArray jsonList = new JSONArray();
+		jsonList.add(object);
+			try (FileWriter file1 = new FileWriter("E://Output.json")) {
+				file1.write(jsonList.toString());
+				file1.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

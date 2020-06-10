@@ -1,0 +1,70 @@
+
+import java.util.*;
+import java.io.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.text.DecimalFormat;
+import java.math.RoundingMode;
+import java.io.FileNotFoundException;
+
+public class Cpu {
+
+	public static void main(String[] args) throws IOException {
+		JSONObject json1 = new JSONObject();
+		JSONObject json2 = new JSONObject();
+		JSONObject json3 = new JSONObject();
+		double[] array = new double[10000];
+		File file = new File("E:\\cpu.txt");
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			String string, string1;
+			String value, result;
+			String readLine;
+			int line = 0;
+			int i = 0, j, val = 0, count = 0, start = 0;
+			double temp, max = 0.0, sum = 0.0;
+			while ((readLine = br.readLine()) != null) {
+				count += 1;
+				StringTokenizer st = new StringTokenizer(readLine);
+				while (st.hasMoreTokens()) {
+					string = st.nextToken();
+					start += 1;
+					if (start == 9) {
+						value = string;
+						temp = Double.parseDouble(value);
+						array[i++] = temp;
+						start = 0;
+						break;
+					}
+				}
+			}
+			for (j = 0; j < count; j++) {
+				val = j + 1;
+				string1 = String.format("%d", val);
+				result = String.format("%.1f", array[j]);
+				json2.put(string1 + "s", result);
+				if (array[j] > max) {
+					max = array[j];
+				}
+				sum = sum + array[j];
+				val = 0;
+			}
+			double average = sum / count;
+			String avg = String.format("%.2f", average);
+			String maximum = String.format("%.2f", max);
+			json1.put("values: ", json2);
+			json1.put("maximumcpu", maximum);
+			json1.put("averagecpu", avg);
+			json3.put("sampletransaction", json1);
+			JSONArray jsonList = new JSONArray();
+			jsonList.add(json3);
+			try (FileWriter file1 = new FileWriter("E://result.json")) {
+				file1.write(jsonList.toString());
+				file1.flush();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+}
